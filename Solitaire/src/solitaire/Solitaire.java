@@ -2,7 +2,7 @@ package solitaire;
 
 /**
  *
- * @author Brand
+ * @author Ethan Smith [21153581]
  */
 public class Solitaire {
 
