@@ -9,10 +9,10 @@ public class Card {
     Suit suit;
     FaceValue value;
     
-    public Card() {
+    public Card(Suit suit, FaceValue value) {
         
-        this.suit = Suit.SPADES;
-        this.value = FaceValue.ACE;
+        this.suit = suit;
+        this.value = value;
         
     }
     
@@ -23,9 +23,9 @@ public class Card {
         System.out.println("└────┘"); 
     }
     
-    public static void main(String[] args)
+    public static void main(String[] args) //Main method to test functionality of Card class and methods.
     {
-        Card card = new Card();
+        Card card = new Card(Suit.CLUBS,FaceValue.THREE);
         
         card.PrintCard();
     }
