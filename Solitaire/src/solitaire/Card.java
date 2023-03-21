@@ -6,6 +6,7 @@ package solitaire;
  */
 public class Card {
     
-    
+    Suit suit;
+    FaceValue value;
     
 }
