@@ -16,7 +16,7 @@ public class Card {
         
     }
     
-    public void PrintCard()
+    public void PrintCard() //Prints the card
     {
         System.out.println("┌────┐");
         System.out.println("|"+value.icon+suit.icon+" |");
