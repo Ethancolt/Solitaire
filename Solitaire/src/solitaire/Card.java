@@ -16,18 +16,16 @@ public class Card {
         
     }
     
-    public void PrintCard() //Prints the card
+    public String toString()
     {
-        System.out.println("┌────┐");
-        System.out.println("|"+value.icon+suit.icon+" |");
-        System.out.println("└────┘"); 
+        return "[" + value.icon + suit.icon + "]";
     }
     
     public static void main(String[] args) //Main method to test functionality of Card class and methods.
     {
         Card card = new Card(Suit.CLUBS,FaceValue.THREE);
         
-        card.PrintCard();
+        card.toString();
     }
     
 }
