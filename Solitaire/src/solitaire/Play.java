@@ -50,8 +50,12 @@ public class Play {
             
         }
         
-        //Put the rest of the cards into the Stack
-        
+        //Put the rest of the cards into the Stock
+        for (Card card : newDeck) {
+            
+            stock.addCard(newDeck.remove(0));
+            
+        }
         
     }
 
