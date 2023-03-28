@@ -1,6 +1,7 @@
 package solitaire;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -8,19 +9,10 @@ import java.util.ArrayList;
  */
 public class Play {
     
-    Foundation f1 = new Foundation();
-    Foundation f2 = new Foundation();
-    Foundation f3 = new Foundation();
-    Foundation f4 = new Foundation();
+    Foundation[] foundation = new Foundation[4];
     Stock stock = new Stock();
     Waste waste = new Waste();
-    Table t1 = new Table();
-    Table t2 = new Table();
-    Table t3 = new Table();
-    Table t4 = new Table();
-    Table t5 = new Table();
-    Table t6 = new Table();
-    Table t7 = new Table();
+    Table[] table = new Table[7];
     ArrayList<Card> newDeck = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -33,6 +25,7 @@ public class Play {
     
     public void generate() {
         
+        //Create a deck of cards
         for (Suit s : Suit.values()) {
             
             for (FaceValue fv : FaceValue.values()) {
@@ -43,7 +36,22 @@ public class Play {
             
         }
         
-        System.out.println(newDeck);
+        //Shuffle the deck
+        Collections.shuffle(newDeck);
+        
+        //Lay out cards for the Table
+        for (int column = 0; column < 7; column++) {
+            
+            for (int row = 0; row < column; row++) {
+                
+                table[column].addCard(newDeck.remove(0));
+                
+            }
+            
+        }
+        
+        //Put the rest of the cards into the Stack
+        
         
     }
 
