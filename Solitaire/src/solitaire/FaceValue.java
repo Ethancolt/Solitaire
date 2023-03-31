@@ -28,4 +28,20 @@ public enum FaceValue {
         
     }
     
+    public static boolean compare(char face) {
+        
+        for (FaceValue i : FaceValue.values()) {
+            
+            if (Character.toLowerCase(face) == Character.toLowerCase(i.icon)) {
+                
+                return true;
+                
+            }
+            
+        }
+        
+        return false;
+        
+    }
+    
 }

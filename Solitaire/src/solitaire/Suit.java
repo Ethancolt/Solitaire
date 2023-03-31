@@ -18,5 +18,21 @@ public enum Suit {
         this.icon = icon;
         
     }
+    
+    public static boolean compare(char suit) {
+        
+        for (Suit i : Suit.values()) {
+            
+            if (Character.toLowerCase(suit) == Character.toLowerCase(i.icon)) {
+                
+                return true;
+                
+            }
+            
+        }
+        
+        return false;
+        
+    }
 
 }
