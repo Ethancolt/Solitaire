@@ -2,9 +2,70 @@ package solitaire;
 
 /**
  *
- * @author Ethan Smith [21153581]
+ * @author Trey Baker [21155292]
+ * 
  */
+import java.util.Stack;
 public abstract class CardPile {
+
+    protected Stack<Card> cards;
+    
+    public CardPile() //CardPile constructor
+    {
+        cards = new Stack<Card>();
+    }
+    
+    public void addCard(Card card) // Adds a card to a table pile
+    {
+      cards.push(card);
+    }
+    
+    public Card removeCard() // Removes the top card in the cards Stack.
+    {
+        return cards.pop();
+    }
+    
+    public Card getTopCard() //Returns the top card in the cards Stack.
+    {
+        return cards.peek();
+    }
+    
+    public void displayCards() //Displays all Cards in the cards Stack
+    {
+        for (Card card: cards)
+        {
+            System.out.println(card.toString() + "\n");
+        }
+    }
+    
+    public static void main(String[] args) //Main Method to Test Functionality.
+    
+    {
+        CardPile test = new Table();
+        
+        Card aceSpades = new Card(Suit.SPADES, FaceValue.ACE);
+        Card twoDiamonds = new Card(Suit.DIAMONDS,FaceValue.TWO);
+        Card threeClubs = new Card (Suit.CLUBS, FaceValue.THREE);
+        
+        test.addCard(aceSpades);
+        
+        System.out.println(test.getTopCard());
+        
+        test.addCard(twoDiamonds);
+        
+        System.out.println(test.getTopCard());
+        
+        test.addCard(threeClubs);
+        
+        System.out.println(test.getTopCard());
+        
+        test.removeCard();
+        
+        System.out.println(test.getTopCard());
+        
+        test.displayCards();
+        
+    }
     
     
     
