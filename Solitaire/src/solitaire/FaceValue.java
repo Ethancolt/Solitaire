@@ -28,6 +28,7 @@ public enum FaceValue {
         
     }
     
+    
     public static boolean compare(char face) {
         
         for (FaceValue i : FaceValue.values()) {

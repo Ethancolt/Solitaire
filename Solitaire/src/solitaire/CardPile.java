@@ -34,7 +34,7 @@ public abstract class CardPile {
     {
         for (Card card: cards)
         {
-            System.out.println(card.toString() + "\n");
+            System.out.println(card.toString());
         }
     }
     
@@ -58,6 +58,8 @@ public abstract class CardPile {
         test.addCard(threeClubs);
         
         System.out.println(test.getTopCard());
+        
+        System.out.println();
         
         test.removeCard();
         
