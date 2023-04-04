@@ -6,16 +6,18 @@ package solitaire;
  */
 public enum Suit {
     
-    DIAMONDS('♦'), 
-    HEARTS('♥'), 
-    SPADES('♠'), 
-    CLUBS('♣');
+    DIAMONDS('♦', 'R'), 
+    HEARTS('♥', 'R'), 
+    SPADES('♠', 'B'), 
+    CLUBS('♣', 'B');
     
     public final char icon;
+    public final char color;
     
-    Suit(char icon) {
+    Suit(char icon, char color) {
         
         this.icon = icon;
+        this.color = color;
         
     }
     
