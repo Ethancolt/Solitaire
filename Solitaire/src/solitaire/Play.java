@@ -86,9 +86,21 @@ public class Play {
     
     public boolean playGame(Scanner keyboard) {
         
-        //todo: display cards
+        //pending: @Trey to create a display cards method
         
-        System.out.println("Table: "+table+"\nStock: "+stock+"\nWaste: "+waste+"\nFoundation: "+foundation);
+        System.out.println("Table0: "+table[0]+
+                "\nTable1: "+table[1]+
+                "\nTable2: "+table[2]+
+                "\nTable3: "+table[3]+
+                "\nTable4: "+table[4]+
+                "\nTable5: "+table[5]+
+                "\nTable6: "+table[6]+
+                "\nStock: "+stock+
+                "\nWaste: "+waste+
+                "\nFoundation0: "+foundation[0]+
+                "\nFoundation1: "+foundation[1]+
+                "\nFoundation2: "+foundation[2]+
+                "\nFoundation3: "+foundation[3]);
         
         //ask user what action they would like to take
         keyboard = new Scanner(System.in);
@@ -300,18 +312,7 @@ public class Play {
         
         char[] cardValue = card.toCharArray();
         
-        return FaceValue.compare(cardValue[0]) && Suit.compare(cardValue[1]);
-        
-    }
-    
-    /**
-     * Returns the CardPile if the card is found on top of that pile.
-     **/
-    public CardPile findPile(String card) {
-        
-        char[] cardValue = card.toCharArray();
-        
-        switch (cardValue[1]) {
+        switch (Character.toLowerCase(cardValue[1])) {
             case 'd':
                 
                 cardValue[1] = '♦';
@@ -333,29 +334,81 @@ public class Play {
                 
                 break;
             default:
-                throw new AssertionError();
+                
+                System.out.println("Invalid Suit.");
+                
+                break;
+        }
+        
+        return FaceValue.compare(cardValue[0]) && Suit.compare(cardValue[1]);
+        
+    }
+    
+    /**
+     * Returns the CardPile if the card is found on top of that pile.
+     **/
+    public CardPile findPile(String card) {
+        
+        char[] cardValue = card.toCharArray();
+        
+        switch (Character.toLowerCase(cardValue[1])) {
+            case 'd':
+                
+                cardValue[1] = '♦';
+                
+                break;
+            case 'h':
+                
+                cardValue[1] = '♥';
+                
+                break;
+            case 's':
+                
+                cardValue[1] = '♠';
+                
+                break;
+            case 'c':
+                
+                cardValue[1] = '♣';
+                
+                break;
+            default:
+                
+                System.out.println("Invalid Suit.");
+                
+                break;
         }
         
         Card top = null;
         
         for (Table t : table) {
             
-            top = t.getTopCard();
-            
-            if (top.value.icon == cardValue[0] && top.suit.icon == cardValue[1]) {
+            //pending: @Trey to create getSize() method in Table
+            if (t.getSize() != 0) {
                 
-                return t;
+                top = t.getTopCard();
+            
+                if (top.value.icon == cardValue[0] && top.suit.icon == cardValue[1]) {
+
+                    return t;
+
+                }
                 
             }
             
         }
         
-        top = waste.getTopCard();
+        //pending: @Trey to create getSize() method in Waste
+        if (waste.getSize() != 0) {
+            
+            top = waste.getTopCard();
         
-        if (top.value.icon == cardValue[0] && top.suit.icon == cardValue[1]) {
-                
-                return waste;
-                
+            if (top.value.icon == cardValue[0] && top.suit.icon == cardValue[1]) {
+
+                    return waste;
+
+            }
+            
         }
         
         return null;
