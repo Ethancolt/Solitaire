@@ -38,7 +38,11 @@ public class Play {
         
         game.generate();
         
-        while (game.playGame());
+        Scanner keyboard = new Scanner(System.in);
+        
+        while (game.playGame(keyboard));
+        
+        keyboard.close();
 
     }
     
@@ -80,14 +84,14 @@ public class Play {
         
     }
     
-    public boolean playGame() {
+    public boolean playGame(Scanner keyboard) {
         
         //todo: display cards
         
         System.out.println("Table: "+table+"\nStock: "+stock+"\nWaste: "+waste+"\nFoundation: "+foundation);
         
         //ask user what action they would like to take
-        Scanner keyboard = new Scanner(System.in);
+        keyboard = new Scanner(System.in);
         
         System.out.println("Please enter your next move:");
         
@@ -143,8 +147,6 @@ public class Play {
                             break;
                         case "f":
 
-                            //todo: check if card can be placed in foundation.
-                            
                             switch (currentPile.getTopCard().suit.icon) {
                                 case '♦':
                                     
@@ -288,8 +290,6 @@ public class Play {
             
         }
         
-        
-        keyboard.close();
         
         //return true to continue the game
         return true;
