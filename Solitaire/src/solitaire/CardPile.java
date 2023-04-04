@@ -38,6 +38,11 @@ public abstract class CardPile {
         }
     }
     
+    public int getSize() //Get's the size of the cards stack and returns the size.
+    {
+        return cards.size();
+    }
+    
     public static void main(String[] args) //Main Method to Test Functionality.
     
     {
