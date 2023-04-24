@@ -15,6 +15,7 @@ public class Play {
     Waste waste = new Waste();
     Table[] table = new Table[7];
     ArrayList<Card> newDeck = new ArrayList<>();
+    boolean complete = false;
 
     public Play() {
 
@@ -41,6 +42,16 @@ public class Play {
         Scanner keyboard = new Scanner(System.in);
 
         while (game.playGame(keyboard));
+        
+        if (game.complete) {
+            
+            //todo: output a congradulations and save highscore
+            
+        } else {
+            
+            //todo: save current game, so it can be continued later
+            
+        }
 
         keyboard.close();
 
@@ -116,9 +127,8 @@ public class Play {
 
                 //check if the card is on top, and return the pile
                 CardPile currentPile = findPile(command[0]);
-                
-                //todo: check if Card is face up and can be moved
 
+                //todo: check if Card is face up and can be moved
                 if (currentPile != null) {
 
                     //checks which command the user is performing, and executes that command.
@@ -282,8 +292,26 @@ public class Play {
 
         }
 
-        //return true to continue the game
-        return true;
+        //return true to continue the game, unless the game has been completed
+        if (table[0].getSize() == 0
+                && table[1].getSize() == 0
+                && table[2].getSize() == 0
+                && table[3].getSize() == 0
+                && table[4].getSize() == 0
+                && table[5].getSize() == 0
+                && table[6].getSize() == 0
+                && stock.getSize() == 0
+                && waste.getSize() == 0) {
+            
+            complete = true;
+            
+            return false;
+
+        } else {
+
+            return true;
+
+        }
 
     }
 
@@ -381,7 +409,7 @@ public class Play {
 
             top = waste.getTopCard();
 
-            if (top.value.icon == cardValue[0] && top.suit.icon == cardValue[1]) {
+            if (Character.toLowerCase(top.value.icon) == cardValue[0] && Character.toLowerCase(top.suit.icon) == cardValue[1]) {
 
                 return waste;
 
