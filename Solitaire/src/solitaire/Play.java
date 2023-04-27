@@ -16,6 +16,7 @@ public class Play {
     Table[] table = new Table[7];
     ArrayList<Card> newDeck = new ArrayList<>();
     boolean complete = false;
+    int moves = 0;
 
     public Play() {
 
@@ -45,7 +46,10 @@ public class Play {
         
         if (game.complete) {
             
-            //todo: output a congradulations and save highscore
+            System.out.println("Congradulations you have won!!");
+            System.out.println("Your final score was: "+ (1000 - game.moves));
+
+            //todo: save highscore
             
         } else {
             
@@ -92,6 +96,13 @@ public class Play {
             stock.addCard(newDeck.remove(0));
 
         }
+        
+        //Turn the top cards face up
+        for (Table t : table) {
+            
+            t.getTopCard().faceUp = true;
+            
+        }
 
     }
 
@@ -125,11 +136,10 @@ public class Play {
             //check if the card is valid
             if (isValidCard(command[0])) {
 
-                //check if the card is on top, and return the pile
-                CardPile currentPile = findPile(command[0]);
+                //find the location of the card if it is face up
+                CardLocation location = findPile(command[0]);
 
-                //todo: check if Card is face up and can be moved
-                if (currentPile != null) {
+                if (location != null) {
 
                     //checks which command the user is performing, and executes that command.
                     CardPile nextPile = null;
@@ -175,18 +185,39 @@ public class Play {
 
                             default:
 
-                                nextPile = currentPile;
+                                nextPile = null;
 
                                 break;
 
                         }
 
-                        if (nextPile.getSize() != 0) {
+                        if (nextPile == null) {
+                            
+                            System.out.println("Incorrect pile name!");
+                            
+                        } else if (nextPile.getSize() != 0) {
 
-                            if (nextPile.getTopCard().value.ordinal() - 1 == currentPile.getTopCard().value.ordinal()
-                                    && nextPile.getTopCard().suit.color != currentPile.getTopCard().suit.color) {
+                            if (nextPile.getTopCard().value.ordinal() - 1 == location.pile.getCardByIndex(location.index).value.ordinal()
+                                    && nextPile.getTopCard().suit.color != location.pile.getCardByIndex(location.index).suit.color) {
 
-                                nextPile.addCard(currentPile.removeCard());
+                                Table temp = new Table();
+                                
+                                for (int i = 0; i < location.index + 1; i++) {
+                                    
+                                    temp.addCard(location.pile.removeCard());
+                                    
+                                }
+                                
+                                location.pile.getTopCard().faceUp = true;
+                                
+                                for (int i = 0; i < location.index + 1; i++) {
+                                    
+                                    nextPile.addCard(temp.removeCard());
+                                    
+                                }
+                                
+                                moves++;
+                                
 
                             } else {
 
@@ -196,9 +227,25 @@ public class Play {
 
                         } else {
 
-                            if (currentPile.getTopCard().value == FaceValue.KING) {
+                            if (location.pile.getTopCard().value == FaceValue.KING) {
 
-                                nextPile.addCard(currentPile.removeCard());
+                                Table temp = new Table();
+                                
+                                for (int i = 0; i < location.index + 1; i++) {
+                                    
+                                    temp.addCard(location.pile.removeCard());
+                                    
+                                }
+                                
+                                location.pile.getTopCard().faceUp = true;
+                                
+                                for (int i = 0; i < location.index + 1; i++) {
+                                    
+                                    nextPile.addCard(temp.removeCard());
+                                    
+                                }
+                                
+                                moves++;
 
                             } else {
 
@@ -208,10 +255,10 @@ public class Play {
 
                         }
 
-                    } else {
+                    } else if (location.index == 0) {
 
                         //if the user enters the command f
-                        switch (currentPile.getTopCard().suit.icon) {
+                        switch (location.pile.getTopCard().suit.icon) {
                             case '♦':
 
                                 nextPile = foundation[0];
@@ -242,23 +289,35 @@ public class Play {
                         if (nextPile.getSize() != 0) {
 
                             // if there are cards in the foundation pile, check if the card being placed is 1 higher.
-                            if (nextPile.getTopCard().value.ordinal() + 1 == currentPile.getTopCard().value.ordinal()) {
+                            if (nextPile.getTopCard().value.ordinal() + 1 == location.pile.getTopCard().value.ordinal()) {
 
-                                nextPile.addCard(currentPile.removeCard());
+                                nextPile.addCard(location.pile.removeCard());
+                                
+                                location.pile.getTopCard().faceUp = true;
+                                
+                                moves++;
 
                             }
 
                         } else {
 
                             // if the foundation pile is empty, check if the card is an ace.
-                            if (currentPile.getTopCard().value == FaceValue.ACE) {
+                            if (location.pile.getTopCard().value == FaceValue.ACE) {
 
-                                nextPile.addCard(currentPile.removeCard());
+                                nextPile.addCard(location.pile.removeCard());
+                                
+                                location.pile.getTopCard().faceUp = true;
+                                
+                                moves++;
 
                             }
 
                         }
 
+                    } else {
+                        
+                        System.out.println("Only one card can be moved here at a time!");
+                        
                     }
 
                 } else {
@@ -279,6 +338,8 @@ public class Play {
             if ("s".equals(command[0])) {
 
                 waste.addCard(stock.removeCard());
+                
+                moves++;
 
             } else if ("x".equals(command[0])) {
 
@@ -355,7 +416,7 @@ public class Play {
      * Returns the CardPile if the card is found on top of that pile.
      *
      */
-    public CardPile findPile(String card) {
+    public CardLocation findPile(String card) {
 
         char[] cardValue = card.toCharArray();
 
@@ -387,17 +448,17 @@ public class Play {
                 break;
         }
 
-        Card top = null;
+        Card currentCard = null;
 
         for (Table t : table) {
 
-            if (t.getSize() != 0) {
+            for (int i = 0; i < t.getSize(); i++) {
 
-                top = t.getTopCard();
+                currentCard = t.getCardByIndex(i);
 
-                if (Character.toLowerCase(top.value.icon) == cardValue[0] && Character.toLowerCase(top.suit.icon) == cardValue[1]) {
+                if (Character.toLowerCase(currentCard.faceUp && currentCard.value.icon) == cardValue[0] && Character.toLowerCase(currentCard.suit.icon) == cardValue[1]) {
 
-                    return t;
+                    return new CardLocation(t, i);
 
                 }
 
@@ -407,11 +468,13 @@ public class Play {
 
         if (waste.getSize() != 0) {
 
-            top = waste.getTopCard();
+            currentCard = waste.getTopCard();
 
-            if (Character.toLowerCase(top.value.icon) == cardValue[0] && Character.toLowerCase(top.suit.icon) == cardValue[1]) {
+            if (Character.toLowerCase(currentCard.value.icon) == cardValue[0] && Character.toLowerCase(currentCard.suit.icon) == cardValue[1]) {
 
-                return waste;
+                waste.getTopCard().faceUp = true;
+                
+                return new CardLocation(waste, 0);
 
             }
 
