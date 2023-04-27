@@ -43,7 +43,7 @@ public abstract class CardPile {
         return cards.size();
     }
     
-    public Card getCardByIndex(int index) 
+    public Card getCardByIndex(int index) // Returns the card at a specified index.
     {
         int opposite = cards.size() - 1 - index;
                 
