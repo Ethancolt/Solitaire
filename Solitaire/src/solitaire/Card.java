@@ -8,11 +8,13 @@ public class Card {
     
     Suit suit;
     FaceValue value;
+    boolean faceUp;
     
     public Card(Suit suit, FaceValue value) {
         
         this.suit = suit;
         this.value = value;
+        this.faceUp = false;
         
     }
     
