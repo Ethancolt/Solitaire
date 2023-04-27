@@ -43,18 +43,18 @@ public class Play {
         Scanner keyboard = new Scanner(System.in);
 
         while (game.playGame(keyboard));
-        
-        if (game.complete) {
-            
-            System.out.println("Congradulations you have won!!");
-            System.out.println("Your final score was: "+ (1000 - game.moves));
 
-            //todo: save highscore
-            
+        if (game.complete) {
+
+            System.out.println("Congradulations you have won!!");
+            System.out.println("Your final score was: " + (1000 - game.moves));
+
+            //pending: save highscore
         } else {
-            
-            //todo: save current game, so it can be continued later
-            
+
+            System.out.println("Your score was: " + (1000 - game.moves));
+
+            //pending: save current game, so it can be continued later
         }
 
         keyboard.close();
@@ -96,12 +96,12 @@ public class Play {
             stock.addCard(newDeck.remove(0));
 
         }
-        
+
         //Turn the top cards face up
         for (Table t : table) {
-            
+
             t.getTopCard().faceUp = true;
-            
+
         }
 
     }
@@ -109,19 +109,19 @@ public class Play {
     public boolean playGame(Scanner keyboard) {
 
         //pending: @Trey to create a display cards method
-        System.out.println("Table0: " + table[0]
-                + "\nTable1: " + table[1]
-                + "\nTable2: " + table[2]
-                + "\nTable3: " + table[3]
-                + "\nTable4: " + table[4]
-                + "\nTable5: " + table[5]
-                + "\nTable6: " + table[6]
+        System.out.println("Table1: " + table[0]
+                + "\nTable2: " + table[1]
+                + "\nTable3: " + table[2]
+                + "\nTable4: " + table[3]
+                + "\nTable5: " + table[4]
+                + "\nTable6: " + table[5]
+                + "\nTable7: " + table[6]
                 + "\nStock: " + stock
                 + "\nWaste: " + waste
-                + "\nFoundation0: " + foundation[0]
-                + "\nFoundation1: " + foundation[1]
-                + "\nFoundation2: " + foundation[2]
-                + "\nFoundation3: " + foundation[3]);
+                + "\nFoundation♦: " + foundation[0]
+                + "\nFoundation♥: " + foundation[1]
+                + "\nFoundation♠: " + foundation[2]
+                + "\nFoundation♣: " + foundation[3]);
 
         //ask user what action they would like to take
         keyboard = new Scanner(System.in);
@@ -192,32 +192,35 @@ public class Play {
                         }
 
                         if (nextPile == null) {
-                            
+
                             System.out.println("Incorrect pile name!");
-                            
+
                         } else if (nextPile.getSize() != 0) {
 
                             if (nextPile.getTopCard().value.ordinal() - 1 == location.pile.getCardByIndex(location.index).value.ordinal()
                                     && nextPile.getTopCard().suit.color != location.pile.getCardByIndex(location.index).suit.color) {
 
                                 Table temp = new Table();
-                                
+
                                 for (int i = 0; i < location.index + 1; i++) {
-                                    
+
                                     temp.addCard(location.pile.removeCard());
-                                    
+
                                 }
-                                
-                                location.pile.getTopCard().faceUp = true;
-                                
+
+                                if (location.pile.getSize() != 0) {
+
+                                    location.pile.getTopCard().faceUp = true;
+
+                                }
+
                                 for (int i = 0; i < location.index + 1; i++) {
-                                    
+
                                     nextPile.addCard(temp.removeCard());
-                                    
+
                                 }
-                                
+
                                 moves++;
-                                
 
                             } else {
 
@@ -227,24 +230,28 @@ public class Play {
 
                         } else {
 
-                            if (location.pile.getTopCard().value == FaceValue.KING) {
+                            if (location.pile.getCardByIndex(location.index).value == FaceValue.KING) {
 
                                 Table temp = new Table();
-                                
+
                                 for (int i = 0; i < location.index + 1; i++) {
-                                    
+
                                     temp.addCard(location.pile.removeCard());
-                                    
+
                                 }
-                                
-                                location.pile.getTopCard().faceUp = true;
-                                
+
+                                if (location.pile.getSize() != 0) {
+
+                                    location.pile.getTopCard().faceUp = true;
+
+                                }
+
                                 for (int i = 0; i < location.index + 1; i++) {
-                                    
+
                                     nextPile.addCard(temp.removeCard());
-                                    
+
                                 }
-                                
+
                                 moves++;
 
                             } else {
@@ -292,10 +299,18 @@ public class Play {
                             if (nextPile.getTopCard().value.ordinal() + 1 == location.pile.getTopCard().value.ordinal()) {
 
                                 nextPile.addCard(location.pile.removeCard());
-                                
-                                location.pile.getTopCard().faceUp = true;
-                                
+
+                                if (location.pile.getSize() != 0) {
+
+                                    location.pile.getTopCard().faceUp = true;
+
+                                }
+
                                 moves++;
+
+                            } else {
+
+                                System.out.println("Cannot place card here.");
 
                             }
 
@@ -305,24 +320,32 @@ public class Play {
                             if (location.pile.getTopCard().value == FaceValue.ACE) {
 
                                 nextPile.addCard(location.pile.removeCard());
-                                
-                                location.pile.getTopCard().faceUp = true;
-                                
+
+                                if (location.pile.getSize() != 0) {
+
+                                    location.pile.getTopCard().faceUp = true;
+
+                                }
+
                                 moves++;
+
+                            } else {
+
+                                System.out.println("Card must be an Ace!");
 
                             }
 
                         }
 
                     } else {
-                        
+
                         System.out.println("Only one card can be moved here at a time!");
-                        
+
                     }
 
                 } else {
 
-                    System.out.println("Card is not on top!");
+                    System.out.println("Card is not face up!");
 
                 }
 
@@ -337,9 +360,23 @@ public class Play {
             //check what single part command the user is using
             if ("s".equals(command[0])) {
 
-                waste.addCard(stock.removeCard());
-                
                 moves++;
+
+                if (stock.getSize() != 0) {
+
+                    waste.addCard(stock.removeCard());
+
+                } else {
+
+                    int size = waste.getSize();
+                    
+                    for (int i = 0; i < size; i++) {
+
+                        stock.addCard(waste.removeCard());
+
+                    }
+                    
+                }
 
             } else if ("x".equals(command[0])) {
 
@@ -363,9 +400,9 @@ public class Play {
                 && table[6].getSize() == 0
                 && stock.getSize() == 0
                 && waste.getSize() == 0) {
-            
+
             complete = true;
-            
+
             return false;
 
         } else {
@@ -473,7 +510,7 @@ public class Play {
             if (Character.toLowerCase(currentCard.value.icon) == cardValue[0] && Character.toLowerCase(currentCard.suit.icon) == cardValue[1]) {
 
                 waste.getTopCard().faceUp = true;
-                
+
                 return new CardLocation(waste, 0);
 
             }
