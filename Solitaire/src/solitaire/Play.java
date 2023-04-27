@@ -456,7 +456,7 @@ public class Play {
 
                 currentCard = t.getCardByIndex(i);
 
-                if (Character.toLowerCase(currentCard.faceUp && currentCard.value.icon) == cardValue[0] && Character.toLowerCase(currentCard.suit.icon) == cardValue[1]) {
+                if (currentCard.faceUp && Character.toLowerCase(currentCard.value.icon) == cardValue[0] && Character.toLowerCase(currentCard.suit.icon) == cardValue[1]) {
 
                     return new CardLocation(t, i);
 
