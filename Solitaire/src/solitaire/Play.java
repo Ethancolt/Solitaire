@@ -34,7 +34,8 @@ public class Play {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
 
         Play game = new Play();
 
@@ -46,16 +47,18 @@ public class Play {
         
         if (game.complete) {
             
-            System.out.println("Congradulations you have won!!");
-            System.out.println("Your final score was: "+ (1000 - game.moves));
-
-            //todo: save highscore
+            String playerName;
+            int finalScore = 1000 - game.moves;
             
-        } else {
+            System.out.println("Congratulations you have won!!");
+            System.out.println("Your final score was: "+ finalScore);
+            System.out.println("Please enter your name to save your score!");
+            playerName = keyboard.nextLine();
             
-            //todo: save current game, so it can be continued later
+            SaveGame.saveHighscore(playerName, finalScore);
+            SaveGame.displayHighscores();
             
-        }
+        } 
 
         keyboard.close();
 
@@ -109,19 +112,19 @@ public class Play {
     public boolean playGame(Scanner keyboard) {
 
         //pending: @Trey to create a display cards method
-        System.out.println("Table0: " + table[0]
-                + "\nTable1: " + table[1]
-                + "\nTable2: " + table[2]
-                + "\nTable3: " + table[3]
-                + "\nTable4: " + table[4]
-                + "\nTable5: " + table[5]
-                + "\nTable6: " + table[6]
-                + "\nStock: " + stock
-                + "\nWaste: " + waste
-                + "\nFoundation0: " + foundation[0]
-                + "\nFoundation1: " + foundation[1]
-                + "\nFoundation2: " + foundation[2]
-                + "\nFoundation3: " + foundation[3]);
+    System.out.println("Table0:\n" + table[0]
+            + "\nTable1:\n" + table[1]
+            + "\nTable2:\n" + table[2]
+            + "\nTable3:\n" + table[3]
+            + "\nTable4:\n" + table[4]
+            + "\nTable5:\n" + table[5]
+            + "\nTable6:\n" + table[6]
+            + "\nStock:\n" + stock
+            + "\nWaste:\n" + waste
+            + "\nFoundation0:\n" + foundation[0]
+            + "\nFoundation1:\n" + foundation[1]
+            + "\nFoundation2:\n" + foundation[2]
+            + "\nFoundation3:\n" + foundation[3]);
 
         //ask user what action they would like to take
         keyboard = new Scanner(System.in);
