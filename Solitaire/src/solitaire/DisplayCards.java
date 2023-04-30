@@ -20,7 +20,7 @@ public class DisplayCards
             "Table 4", "Table 5", "Table 6",
             "Table 7");
     
-        for (int i = maxSize - 1; i >= 0; i--) 
+        for (int i = 0; i < maxSize; i++) 
         {
             System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%n", 
                 getCard(t1, i), 
@@ -51,9 +51,9 @@ public class DisplayCards
     {
         if (index < table.getSize()) 
         {
-            if(table.getCardByIndex(index).faceUp == true)
+            if(table.getCardByIndex(table.getSize() - 1 - index).faceUp == true)
             {
-                return table.getCardByIndex(index).toString();
+                return table.getCardByIndex(table.getSize() - 1 - index).toString();
             }
             return "[??]";
         } 
