@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author Ethan Smith [21153581]
+ * @author Ethan Smith [21153581] and Trey Baker [21155292]
  */
 public class Play {
 
@@ -111,21 +111,13 @@ public class Play {
 
     public boolean playGame(Scanner keyboard) {
 
-        //pending: @Trey to create a display cards method
-    System.out.println("Table0:\n" + table[0]
-            + "\nTable1:\n" + table[1]
-            + "\nTable2:\n" + table[2]
-            + "\nTable3:\n" + table[3]
-            + "\nTable4:\n" + table[4]
-            + "\nTable5:\n" + table[5]
-            + "\nTable6:\n" + table[6]
-            + "\nStock:\n" + stock
-            + "\nWaste:\n" + waste
-            + "\nFoundation0:\n" + foundation[0]
-            + "\nFoundation1:\n" + foundation[1]
-            + "\nFoundation2:\n" + foundation[2]
-            + "\nFoundation3:\n" + foundation[3]);
-
+        DisplayCards gameDisplay = new DisplayCards();
+        
+        gameDisplay.displayTables(table[0], table[1], table[2], table[3], table[4], table[5], table[6]);
+        gameDisplay.displayStock(stock);
+        gameDisplay.displayWaste(waste);
+        gameDisplay.displayFoundations(foundation[0], foundation[1], foundation[2], foundation[3]);
+        
         //ask user what action they would like to take
         keyboard = new Scanner(System.in);
 
