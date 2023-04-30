@@ -64,7 +64,11 @@ public class Play {
         else
         {
             String playerName;
-            int finalScore = 500 - game.moves;
+            int numOfCards = game.foundation[0].getSize() 
+                    + game.foundation[1].getSize() 
+                    + game.foundation[2].getSize() 
+                    + game.foundation[3].getSize();
+            int finalScore = (int) ((numOfCards / 52f) * 500);
             
             System.out.println("You have quit the game! your score will be lower");
             System.out.println("Your final score was: "+ finalScore);
@@ -390,6 +394,12 @@ public class Play {
     public boolean isValidCard(String card) {
 
         char[] cardValue = card.toCharArray();
+        
+        if (cardValue.length != 2) {
+            
+            return false;
+            
+        }
 
         switch (Character.toLowerCase(cardValue[1])) {
             case 'd':
