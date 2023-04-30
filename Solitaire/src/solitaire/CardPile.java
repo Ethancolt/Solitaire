@@ -6,7 +6,8 @@ package solitaire;
  * 
  */
 import java.util.Stack;
-public abstract class CardPile {
+public abstract class CardPile 
+{
 
     protected Stack<Card> cards;
     
