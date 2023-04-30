@@ -45,7 +45,8 @@ public class Play {
 
         while (game.playGame(keyboard));
         
-        if (game.complete) {
+        if (game.complete) 
+        {
             
             String playerName;
             int finalScore = 1000 - game.moves;
@@ -58,7 +59,22 @@ public class Play {
             SaveGame.saveHighscore(playerName, finalScore);
             SaveGame.displayHighscores();
             
-        } 
+        }
+        
+        else
+        {
+            String playerName;
+            int finalScore = 500 - game.moves;
+            
+            System.out.println("You have quit the game! your score will be lower");
+            System.out.println("Your final score was: "+ finalScore);
+            System.out.println("Please enter your name to save your score!");
+            playerName = keyboard.nextLine();
+            
+            SaveGame.saveHighscore(playerName, finalScore);
+            SaveGame.displayHighscores();
+        }
+        
 
         keyboard.close();
 
