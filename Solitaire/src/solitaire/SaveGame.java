@@ -14,19 +14,24 @@ import java.util.Scanner;
 
 public class SaveGame 
 {
+
     private static final String FILENAME = "highscores.txt";
     private static final int MAX_HIGHSCORES = 10;
 
     public static void saveHighscore(String playerName, int score) 
     {
+
         ArrayList<Highscore> highscores = loadHighscores();
-        
+
         boolean updated = false;
-        for (int i = 0; i < highscores.size(); i++) 
-        {
+        boolean added = false;
+        for (int i = 0; i < highscores.size(); i++) {
+
             Highscore highscore = highscores.get(i);
+
             if (highscore.playerName.equals(playerName)) 
             {
+
                 if (score > highscore.score) 
                 {
                     highscore.score = score;
@@ -34,15 +39,40 @@ public class SaveGame
                 }
                 break;
             }
+
+            if (score > highscore.score && !added) 
+            {
+                highscores.add(i, new Highscore(playerName, score));
+                added = true;
+            }
         }
-        
-        if (!updated) 
+
+        if (!updated && !added) 
         {
-            highscores.add(new Highscore(playerName, score));
+
+            if (highscores.size() < MAX_HIGHSCORES) 
+            {
+                highscores.add(new Highscore(playerName, score));
+                added = true;
+            }
         }
-        
+
+        if (updated) 
+        {
+            System.out.println("Score updated!");
+        } 
+        else if (added) 
+        {
+            System.out.println("Score saved!");
+        } 
+        else 
+        {
+            System.out.println("Score not saved.");
+            return;
+        }
+
         Collections.sort(highscores);
-        
+
         if (highscores.size() > MAX_HIGHSCORES) 
         {
             highscores.subList(MAX_HIGHSCORES, highscores.size()).clear();
@@ -51,7 +81,8 @@ public class SaveGame
         try 
         {
             FileWriter writer = new FileWriter(FILENAME);
-            for (Highscore highscore : highscores) {
+            for (Highscore highscore : highscores) 
+            {
                 writer.write(highscore.playerName + "," + highscore.score + "\n");
             }
             writer.close();
@@ -60,33 +91,34 @@ public class SaveGame
         {
             e.printStackTrace();
         }
-        
-        if (updated) 
-        {
-            System.out.println("Score updated!");
-        }
+
     }
 
     public static void displayHighscores() 
     {
+
         ArrayList<Highscore> highscores = loadHighscores();
 
         System.out.println("High scores:");
-        
+
         int count = 0;
-        
-        for (Highscore highscore : highscores)
+
+        for (Highscore highscore : highscores) 
         {
-            System.out.println(highscore);
+
             count++;
-            if (count == MAX_HIGHSCORES) 
+            if (count > MAX_HIGHSCORES) 
             {
                 break;
             }
+
+            System.out.println(highscore);
         }
     }
-    
-    private static ArrayList<Highscore> loadHighscores() {
+
+    private static ArrayList<Highscore> loadHighscores() 
+    {
+
         ArrayList<Highscore> highscores = new ArrayList<>();
 
         try 
@@ -96,6 +128,7 @@ public class SaveGame
 
             while (scanner.hasNextLine()) 
             {
+
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
                 String playerName = parts[0];
@@ -110,12 +143,13 @@ public class SaveGame
         {
             e.printStackTrace();
         }
-        
+
         return highscores;
     }
 
     private static class Highscore implements Comparable<Highscore> 
     {
+
         private String playerName;
         private int score;
 
