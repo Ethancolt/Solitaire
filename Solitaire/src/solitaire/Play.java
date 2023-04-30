@@ -310,6 +310,10 @@ public class Play {
                                 
                                 moves++;
 
+                            } else {
+                                
+                                System.out.println("Card must be one higher to be placed here!");
+                                
                             }
 
                         } else {
@@ -323,6 +327,10 @@ public class Play {
                                 
                                 moves++;
 
+                            } else {
+                                
+                                System.out.println("You can only place an Ace here!");
+                                
                             }
 
                         }
