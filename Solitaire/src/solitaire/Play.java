@@ -132,11 +132,9 @@ public class Play {
     public boolean playGame(Scanner keyboard) {
 
          
-        
+        DisplayCards.displayTopRow(stock, waste, foundation[0], foundation[1], foundation[2], foundation[3]);
         DisplayCards.displayTables(table[0], table[1], table[2], table[3], table[4], table[5], table[6]);
-        DisplayCards.displayStock(stock);
-        DisplayCards.displayWaste(waste);
-        DisplayCards.displayFoundations(foundation[0], foundation[1], foundation[2], foundation[3]);
+
         
         //ask user what action they would like to take
         keyboard = new Scanner(System.in);
