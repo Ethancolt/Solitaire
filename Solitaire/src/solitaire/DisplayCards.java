@@ -76,8 +76,6 @@ public class DisplayCards
             stockCard = "[" + stock.cards.size() + "]";
         }
     
-        System.out.println(String.format("%-15s %-15s %-15s %-15s %-15s %-15s", stockCard, " ", " ", " ", " ", " "));
-
         // Print waste card
         String wasteCard = "";
     
@@ -85,8 +83,6 @@ public class DisplayCards
         {
             wasteCard = waste.cards.peek().toString();
         }
-        System.out.println(String.format("%-15s %-15s %-15s %-15s %-15s %-15s", " ", wasteCard, " ", " ", " ", " "));
-
         // Print foundation cards
         String f1Card = "";
         if (!f1.cards.isEmpty()) 
@@ -112,7 +108,7 @@ public class DisplayCards
             f4Card = f4.cards.peek().toString();
         }
     
-        System.out.println(String.format("%-15s %-15s %-15s %-15s %-15s %-15s", " ", " ", f1Card, f2Card, f3Card, f4Card));
+        System.out.println(String.format("%-15s %-15s %-15s %-15s %-15s %-15s", stockCard, wasteCard, f1Card, f2Card, f3Card, f4Card));
 
     }
 }

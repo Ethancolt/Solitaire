@@ -221,7 +221,11 @@ public class Play {
                                     
                                 }
                                 
-                                location.pile.getTopCard().faceUp = true;
+                                if (location.pile.getSize() != 0) {
+                                    
+                                    location.pile.getTopCard().faceUp = true;
+                                    
+                                }
                                 
                                 for (int i = 0; i < location.index + 1; i++) {
                                     
@@ -250,7 +254,11 @@ public class Play {
                                     
                                 }
                                 
-                                location.pile.getTopCard().faceUp = true;
+                                if (location.pile.getSize() != 0) {
+                                    
+                                    location.pile.getTopCard().faceUp = true;
+                                    
+                                }
                                 
                                 for (int i = 0; i < location.index + 1; i++) {
                                     
@@ -306,7 +314,11 @@ public class Play {
 
                                 nextPile.addCard(location.pile.removeCard());
                                 
-                                location.pile.getTopCard().faceUp = true;
+                                if (location.pile.getSize() != 0) {
+                                    
+                                    location.pile.getTopCard().faceUp = true;
+                                    
+                                }
                                 
                                 moves++;
 
@@ -323,7 +335,11 @@ public class Play {
 
                                 nextPile.addCard(location.pile.removeCard());
                                 
-                                location.pile.getTopCard().faceUp = true;
+                                if (location.pile.getSize() != 0) {
+                                    
+                                    location.pile.getTopCard().faceUp = true;
+                                    
+                                }
                                 
                                 moves++;
 
@@ -358,10 +374,26 @@ public class Play {
             //check what single part command the user is using
             if ("s".equals(command[0])) {
 
-                waste.addCard(stock.removeCard());
-                
-                moves++;
+                if (stock.getSize() != 0) {
 
+                    waste.addCard(stock.removeCard());
+                    
+                    moves++;
+                    
+                } else {
+                    
+                    int size = waste.getSize();
+                    
+                    for (int i = 0; i < size; i++) {
+                        
+                        stock.addCard(waste.removeCard());
+                        
+                    }
+                    
+                    moves++;
+                    
+                }
+                
             } else if ("x".equals(command[0])) {
 
                 return false;
