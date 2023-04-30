@@ -6,12 +6,12 @@ package solitaire;
 
 /**
  *
- * @author Itstr
+ * @author Trey Baker [21155292]
  */
 public class DisplayCards 
 {
 
-    public void displayTables (Table t1, Table t2, Table t3, Table t4, Table t5,Table t6, Table t7)
+    public void displayTables (Table t1, Table t2, Table t3, Table t4, Table t5,Table t6, Table t7) //Displays the Table piles in the game
     {
             System.out.println("Table0:\n" + t1
             + "\nTable1:\n" + t2
@@ -22,17 +22,17 @@ public class DisplayCards
             + "\nTable6:\n" + t7);
     }
     
-    public void displayStock(Stock stock)
+    public void displayStock(Stock stock) //Displays the Stock pile in the Game
     {
         System.out.println("\nStock:\n" + stock);
     }
     
-    public void displayWaste(Waste waste)
+    public void displayWaste(Waste waste) // Displays the Waste pile in the game
     {
         System.out.println("\nWaste:\n" + waste);
     }
     
-    public void displayFoundations(Foundation f1, Foundation f2, Foundation f3, Foundation f4)
+    public void displayFoundations(Foundation f1, Foundation f2, Foundation f3, Foundation f4) // Displays the Foundation piles in the game
     {
         System.out.println("\nFoundation0:\n" + f1
             + "\nFoundation1:\n" + f2
