@@ -19,21 +19,74 @@ public class SaveGame
 
     public static void saveHighscore(String playerName, int score) 
     {
+        ArrayList<Highscore> highscores = loadHighscores();
+        
+        boolean updated = false;
+        for (int i = 0; i < highscores.size(); i++) 
+        {
+            Highscore highscore = highscores.get(i);
+            if (highscore.playerName.equals(playerName)) 
+            {
+                if (score > highscore.score) 
+                {
+                    highscore.score = score;
+                    updated = true;
+                }
+                break;
+            }
+        }
+        
+        if (!updated) 
+        {
+            highscores.add(new Highscore(playerName, score));
+        }
+        
+        Collections.sort(highscores);
+        
+        if (highscores.size() > MAX_HIGHSCORES) 
+        {
+            highscores.subList(MAX_HIGHSCORES, highscores.size()).clear();
+        }
+
         try 
         {
-            File file = new File(FILENAME);
-            FileWriter writer = new FileWriter(file, true);
-            writer.write(playerName + "," + score + "\n");
+            FileWriter writer = new FileWriter(FILENAME);
+            for (Highscore highscore : highscores) {
+                writer.write(highscore.playerName + "," + highscore.score + "\n");
+            }
             writer.close();
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
         }
+        
+        if (updated) 
+        {
+            System.out.println("Score updated!");
+        }
     }
 
     public static void displayHighscores() 
     {
+        ArrayList<Highscore> highscores = loadHighscores();
+
+        System.out.println("High scores:");
+        
+        int count = 0;
+        
+        for (Highscore highscore : highscores)
+        {
+            System.out.println(highscore);
+            count++;
+            if (count == MAX_HIGHSCORES) 
+            {
+                break;
+            }
+        }
+    }
+    
+    private static ArrayList<Highscore> loadHighscores() {
         ArrayList<Highscore> highscores = new ArrayList<>();
 
         try 
@@ -57,21 +110,8 @@ public class SaveGame
         {
             e.printStackTrace();
         }
-
-        Collections.sort(highscores);
-        System.out.println("High scores:");
         
-        int count = 0;
-        
-        for (Highscore highscore : highscores)
-        {
-            System.out.println(highscore);
-            count++;
-            if (count == MAX_HIGHSCORES) 
-            {
-                break;
-            }
-        }
+        return highscores;
     }
 
     private static class Highscore implements Comparable<Highscore> 
@@ -98,4 +138,3 @@ public class SaveGame
         }
     }
 }
-
