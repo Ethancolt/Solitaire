@@ -1,10 +1,7 @@
 package solitaire;
 
 
-/**
- *
- * @author Trey Baker [21155292]
- */
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,74 +22,87 @@ public class SaveGame
 
         boolean updated = false;
         boolean added = false;
-        for (int i = 0; i < highscores.size(); i++) {
 
-            Highscore highscore = highscores.get(i);
+        // Check if score is within the top 10 high scores
+        if (highscores.size() < MAX_HIGHSCORES || score > highscores.get(MAX_HIGHSCORES-1).score) 
+        {
 
-            if (highscore.playerName.equals(playerName)) 
+            for (int i = 0; i < highscores.size(); i++) 
             {
 
-                if (score > highscore.score) 
+                Highscore highscore = highscores.get(i);
+
+                if (highscore.playerName.equals(playerName)) 
                 {
-                    highscore.score = score;
-                    updated = true;
+
+                    if (score > highscore.score) 
+                    {
+                        highscore.score = score;
+                        updated = true;
+                    }
+                    break;
                 }
-                break;
+
+                if (score > highscore.score && !added) 
+                {
+                    highscores.add(i, new Highscore(playerName, score));
+                    added = true;
+                }   
             }
 
-            if (score > highscore.score && !added) 
+            if (!updated && !added) 
             {
-                highscores.add(i, new Highscore(playerName, score));
-                added = true;
+
+                if (highscores.size() < MAX_HIGHSCORES) 
+                {
+                    highscores.add(new Highscore(playerName, score));
+                    added = true;
+                }
             }
-        }
 
-        if (!updated && !added) 
-        {
-
-            if (highscores.size() < MAX_HIGHSCORES) 
+            if (updated) 
             {
-                highscores.add(new Highscore(playerName, score));
-                added = true;
+                System.out.println("Score updated!");
+            } 
+            else if (added) 
+            {
+                System.out.println("Score saved!");
+            } 
+            else 
+            {   
+                System.out.println("Score not saved.");
+                return;
             }
-        }
 
-        if (updated) 
-        {
-            System.out.println("Score updated!");
-        } 
-        else if (added) 
-        {
-            System.out.println("Score saved!");
+            Collections.sort(highscores);
+
+            if (highscores.size() > MAX_HIGHSCORES) 
+            {
+                highscores.subList(MAX_HIGHSCORES, highscores.size()).clear();
+            }
+
+            try 
+            {
+                FileWriter writer = new FileWriter(FILENAME);
+                for (Highscore highscore : highscores) 
+                {
+                    writer.write(highscore.playerName + "," + highscore.score + "\n");
+                }
+            
+                writer.close();
+            } 
+            catch (IOException e) 
+            {
+                e.printStackTrace();
+            }
+
         } 
         else 
         {
-            System.out.println("Score not saved.");
-            return;
+            System.out.println("Score not saved. It is not within the top 10 high scores.");
         }
-
-        Collections.sort(highscores);
-
-        if (highscores.size() > MAX_HIGHSCORES) 
-        {
-            highscores.subList(MAX_HIGHSCORES, highscores.size()).clear();
-        }
-
-        try 
-        {
-            FileWriter writer = new FileWriter(FILENAME);
-            for (Highscore highscore : highscores) 
-            {
-                writer.write(highscore.playerName + "," + highscore.score + "\n");
-            }
-            writer.close();
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
-
     }
+
 
     public static void displayHighscores() 
     {
@@ -103,19 +113,20 @@ public class SaveGame
 
         int count = 0;
 
-        for (Highscore highscore : highscores) 
+        for (int i = 0; i < highscores.size(); i++) 
         {
 
-            count++;
-            if (count > MAX_HIGHSCORES) 
+            if (count >= MAX_HIGHSCORES) 
             {
                 break;
-            }
+            }   
 
+            Highscore highscore = highscores.get(i);
             System.out.println(highscore);
+            count++;
         }
     }
-
+    
     private static ArrayList<Highscore> loadHighscores() 
     {
 
