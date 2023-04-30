@@ -244,7 +244,7 @@ public class Play {
 
                         } else {
 
-                            if (location.pile.getTopCard().value == FaceValue.KING) {
+                            if (location.pile.getCardByIndex(location.index).value == FaceValue.KING) {
 
                                 Table temp = new Table();
                                 
@@ -359,7 +359,7 @@ public class Play {
 
                 } else {
 
-                    System.out.println("Card is not on top!");
+                    System.out.println("Card is not face up!");
 
                 }
 
