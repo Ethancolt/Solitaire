@@ -6,13 +6,13 @@ package solitaire;
  */
 public class Waste extends CardPile 
 {
-    public Waste()
+    public Waste() //Super Constructor
     {
         super();
     }
     
     @Override
-    public String toString()
+    public String toString() //ToString Method for the Waste Pile
     {
        String out = "";
         for (Card card: cards)
