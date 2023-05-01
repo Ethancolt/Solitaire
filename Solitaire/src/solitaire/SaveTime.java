@@ -70,7 +70,26 @@ public class SaveTime
             }
 
             TimeRecord time = times.get(i);
-            System.out.println(time.playerName + ": " + time.elapsedTime + " seconds");
+            long minutes = time.elapsedTime / 60;
+            time.elapsedTime = time.elapsedTime % 60;
+            
+            long hours = minutes / 60;
+            minutes = minutes % 60;
+            
+            if (minutes == 0) {
+                
+                System.out.println(time.playerName + ": " + time.elapsedTime + " seconds");
+                
+            } else if (hours == 0) {
+                
+                System.out.println(time.playerName + ": " + minutes + " minutes, " + time.elapsedTime + " seconds");
+                
+            } else {
+                
+                System.out.println(time.playerName + ": " + hours + " hours, " + minutes + " minutes, "+ time.elapsedTime + " seconds");
+                
+            }
+            
             count++;
         }
     }

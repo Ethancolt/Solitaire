@@ -58,6 +58,27 @@ public class Play {
             
             System.out.println("Congratulations you have won!!");
             System.out.println("Your final score was: "+ finalScore);
+            
+            long minutes = elapsedTime / 60;
+            elapsedTime = elapsedTime % 60;
+            
+            long hours = minutes / 60;
+            minutes = minutes % 60;
+            
+            if (minutes == 0) {
+                
+                System.out.println("The time it took to complete the game was: " + elapsedTime + " Seconds!");
+                
+            } else if (hours == 0) {
+                
+                System.out.println("The time it took to complete the game was: " + minutes + " minutes, " + elapsedTime + " Seconds!");
+                
+            } else {
+                
+                System.out.println("The time it took to complete the game was: " + hours + " hours, " + minutes + " minutes, " + elapsedTime + " Seconds!");
+                
+            }
+            
             System.out.println("The time it took to complete the game was: " + elapsedTime + " Seconds!");
             System.out.println("\nPlease enter your name to save your score!");
             playerName = keyboard.nextLine();
