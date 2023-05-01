@@ -15,51 +15,45 @@ public class SaveGame
     private static final String FILENAME = "highscores.txt";
     private static final int MAX_HIGHSCORES = 10;
 
-    public static void saveHighscore(String playerName, int score) 
+    public static void saveHighscore(String playerName, int score) //Handles the Writing of New High Scores
     {
-
         ArrayList<Highscore> highscores = loadHighscores();
-
         boolean updated = false;
         boolean added = false;
+        boolean found = false;
+        Highscore existingHighscore = null;
 
         // Check if score is within the top 10 high scores
         if (highscores.size() < MAX_HIGHSCORES || score > highscores.get(MAX_HIGHSCORES-1).score) 
         {
-
             for (int i = 0; i < highscores.size(); i++) 
             {
-
                 Highscore highscore = highscores.get(i);
-
                 if (highscore.playerName.equals(playerName)) 
                 {
-
                     if (score > highscore.score) 
                     {
                         highscore.score = score;
                         updated = true;
+                        found = true;
                     }
+                    existingHighscore = highscore;
                     break;
                 }
-
                 if (score > highscore.score && !added) 
                 {
                     highscores.add(i, new Highscore(playerName, score));
                     added = true;
                 }   
             }
-
-            if (!updated && !added) 
+            if (!updated && !added && !found) 
             {
-
                 if (highscores.size() < MAX_HIGHSCORES) 
                 {
                     highscores.add(new Highscore(playerName, score));
                     added = true;
                 }
             }
-
             if (updated) 
             {
                 System.out.println("Score updated!");
@@ -73,14 +67,37 @@ public class SaveGame
                 System.out.println("Score not saved.");
                 return;
             }
-
+        
             Collections.sort(highscores);
-
+        
             if (highscores.size() > MAX_HIGHSCORES) 
             {
                 highscores.subList(MAX_HIGHSCORES, highscores.size()).clear();
             }
-
+            
+            // Remove any duplicates with a lower score
+            if (existingHighscore != null) 
+            {
+                boolean updatedExisting = false;
+                for (int i = 0; i < highscores.size(); i++) 
+                {
+                    Highscore highscore = highscores.get(i);
+                    if (highscore.playerName.equals(playerName) && highscore.score < existingHighscore.score) 
+                    {
+                        highscores.remove(i);
+                        break;
+                    } 
+                    else if (highscore.playerName.equals(playerName) && highscore.score > existingHighscore.score) 
+                    {
+                        updatedExisting = true;
+                        break;
+                    }
+                }
+                if (updatedExisting) 
+                {
+                    highscores.remove(existingHighscore);
+                }
+            }
             try 
             {
                 FileWriter writer = new FileWriter(FILENAME);
@@ -88,14 +105,12 @@ public class SaveGame
                 {
                     writer.write(highscore.playerName + "," + highscore.score + "\n");
                 }
-            
                 writer.close();
             } 
             catch (IOException e) 
             {
                 e.printStackTrace();
             }
-
         } 
         else 
         {
@@ -104,7 +119,9 @@ public class SaveGame
     }
 
 
-    public static void displayHighscores() 
+
+
+    public static void displayHighscores() //Method that Displays the High Scores
     {
 
         ArrayList<Highscore> highscores = loadHighscores();
@@ -127,7 +144,7 @@ public class SaveGame
         }
     }
     
-    private static ArrayList<Highscore> loadHighscores() 
+    private static ArrayList<Highscore> loadHighscores() // Handles Reading of High Scores for the Display
     {
 
         ArrayList<Highscore> highscores = new ArrayList<>();
@@ -158,26 +175,26 @@ public class SaveGame
         return highscores;
     }
 
-    private static class Highscore implements Comparable<Highscore> 
+    private static class Highscore implements Comparable<Highscore> //Nested Class for the Highscore object
     {
 
         private String playerName;
         private int score;
 
-        public Highscore(String playerName, int score) 
+        public Highscore(String playerName, int score) //Highscore Constructor
         {
             this.playerName = playerName;
             this.score = score;
         }
 
         @Override
-        public int compareTo(Highscore o) 
+        public int compareTo(Highscore o) //Compares two Highscores
         {
             return Integer.compare(o.score, this.score);
         }
 
         @Override
-        public String toString() 
+        public String toString() //HighScore ToString Method
         {
             return playerName + ": " + score;
         }
