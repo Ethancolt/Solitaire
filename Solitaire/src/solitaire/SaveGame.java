@@ -1,6 +1,9 @@
 package solitaire;
 
-
+/**
+ *
+ * @author Trey Baker [21155292]
+ */
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,16 +18,16 @@ public class SaveGame
     private static final String FILENAME = "highscores.txt";
     private static final int MAX_HIGHSCORES = 10;
 
-    public static void saveHighscore(String playerName, int score) //Handles the Writing of New High Scores
-    {
+    public static void saveHighscore(String playerName, int score) //Handles the Writing of New High Scores, calls WriteHighscores to write to .txt file
+    {   
         ArrayList<Highscore> highscores = loadHighscores();
         boolean updated = false;
         boolean added = false;
         boolean found = false;
         Highscore existingHighscore = null;
 
-        // Check if score is within the top 10 high scores
-        if (highscores.size() < MAX_HIGHSCORES || score > highscores.get(MAX_HIGHSCORES-1).score) 
+        
+        if (highscores.size() < MAX_HIGHSCORES || score > highscores.get(MAX_HIGHSCORES-1).score) // Check if score is within the top 10 high scores
         {
             for (int i = 0; i < highscores.size(); i++) 
             {
@@ -36,7 +39,12 @@ public class SaveGame
                         highscore.score = score;
                         updated = true;
                         found = true;
-                    }
+                    } 
+                    else  
+                    {
+                        System.out.println("\nScore not saved. The player name already exists in the high score table with a higher score.");
+                        return;
+                    }   
                     existingHighscore = highscore;
                     break;
                 }
@@ -56,67 +64,79 @@ public class SaveGame
             }
             if (updated) 
             {
-                System.out.println("Score updated!");
+                updateHighscore(highscores, existingHighscore); //Calls updateHighscore if the new Highscore is higher under the already existing name.
             } 
             else if (added) 
             {
-                System.out.println("Score saved!");
+                System.out.println("\nScore saved!");
+                writeHighscores(highscores);
             } 
             else 
             {   
-                System.out.println("Score not saved.");
+                System.out.println("\nScore not saved.");
                 return;
-            }
-        
-            Collections.sort(highscores);
-        
-            if (highscores.size() > MAX_HIGHSCORES) 
-            {
-                highscores.subList(MAX_HIGHSCORES, highscores.size()).clear();
-            }
-            
-            // Remove any duplicates with a lower score
-            if (existingHighscore != null) 
-            {
-                boolean updatedExisting = false;
-                for (int i = 0; i < highscores.size(); i++) 
-                {
-                    Highscore highscore = highscores.get(i);
-                    if (highscore.playerName.equals(playerName) && highscore.score < existingHighscore.score) 
-                    {
-                        highscores.remove(i);
-                        break;
-                    } 
-                    else if (highscore.playerName.equals(playerName) && highscore.score > existingHighscore.score) 
-                    {
-                        updatedExisting = true;
-                        break;
-                    }
-                }
-                if (updatedExisting) 
-                {
-                    highscores.remove(existingHighscore);
-                }
-            }
-            try 
-            {
-                FileWriter writer = new FileWriter(FILENAME);
-                for (Highscore highscore : highscores) 
-                {
-                    writer.write(highscore.playerName + "," + highscore.score + "\n");
-                }
-                writer.close();
-            } 
-            catch (IOException e) 
-            {
-                e.printStackTrace();
             }
         } 
         else 
         {
-            System.out.println("Score not saved. It is not within the top 10 high scores.");
+            System.out.println("\nScore not saved. It is not within the top 10 high scores."); //Score is not written if outside the top 10
         }
     }
+
+
+    public static void updateHighscore(ArrayList<Highscore> highscores, Highscore existingHighscore) //Updates a Score if the new score is higher under the same name.
+    {
+        Collections.sort(highscores);
+        
+        if (highscores.size() > MAX_HIGHSCORES) 
+        {
+            highscores.subList(MAX_HIGHSCORES, highscores.size()).clear();
+        }
+    
+        
+        if (existingHighscore != null) // Removes any duplicates with a lower score
+        {
+            boolean updatedExisting = false;
+            for (int i = 0; i < highscores.size(); i++) 
+            {
+                Highscore highscore = highscores.get(i);
+                if (highscore.playerName.equals(existingHighscore.playerName) && highscore.score < existingHighscore.score) 
+                {
+                    highscores.remove(i);
+                    break;
+                } 
+                else if (highscore.playerName.equals(existingHighscore.playerName) && highscore.score > existingHighscore.score) 
+                {
+                    updatedExisting = true;
+                    break;
+                }
+            }
+            if (updatedExisting) 
+            {
+                highscores.remove(existingHighscore);
+            }
+        }
+        System.out.println("\nScore updated!");
+        writeHighscores(highscores);
+    }
+
+    public static void writeHighscores(ArrayList<Highscore> highscores) //Writes the High Scores highscores.txt
+    {
+        try 
+        {
+            FileWriter writer = new FileWriter(FILENAME);
+            for (Highscore highscore : highscores) 
+            {
+                writer.write(highscore.playerName + "," + highscore.score + "\n");
+            }
+            writer.close();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
 
 
 
