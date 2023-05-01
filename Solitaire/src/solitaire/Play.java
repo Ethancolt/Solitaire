@@ -3,7 +3,8 @@ package solitaire;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
-
+import java.time.Instant;
+import java.time.Duration;
 /**
  *
  * @author Ethan Smith [21153581] and Trey Baker [21155292]
@@ -17,6 +18,7 @@ public class Play {
     ArrayList<Card> newDeck = new ArrayList<>();
     boolean complete = false;
     int moves = 0;
+    
 
     public Play() {
 
@@ -36,7 +38,8 @@ public class Play {
 
     public static void main(String[] args)
     {
-
+        Instant startTime = Instant.now();
+        
         Play game = new Play();
 
         game.generate();
@@ -48,21 +51,32 @@ public class Play {
         if (game.complete) 
         {
             
+            Instant finishTime = Instant.now();
+            long elapsedTime = (Duration.between(startTime, finishTime).toMillis()) / 1000;
             String playerName;
             int finalScore = 1000 - game.moves;
             
             System.out.println("Congratulations you have won!!");
             System.out.println("Your final score was: "+ finalScore);
-            System.out.println("Please enter your name to save your score!");
+            System.out.println("The time it took to complete the game was: " + elapsedTime + " Seconds!");
+            System.out.println("\nPlease enter your name to save your score!");
             playerName = keyboard.nextLine();
-            
+
             SaveGame.saveHighscore(playerName, finalScore);
+            System.out.println();
             SaveGame.displayHighscores();
+            SaveTime.saveTime(playerName, elapsedTime);
+            System.out.println();
+            SaveTime.displayTimes();
             
         }
         
         else
         {
+            Instant finishTime = Instant.now();
+            long elapsedTime = (Duration.between(startTime, finishTime).toMillis()) / 1000;
+            
+  
             String playerName;
             int numOfCards = game.foundation[0].getSize() 
                     + game.foundation[1].getSize() 
@@ -72,11 +86,15 @@ public class Play {
             
             System.out.println("You have quit the game! your score will be lower");
             System.out.println("Your final score was: "+ finalScore);
-            System.out.println("Please enter your name to save your score!");
+            System.out.println("The time it took to quit the game was: " + elapsedTime + " Seconds!" + " Your time will not be saved!");
+            System.out.println("\nPlease enter your name to save your score!");
             playerName = keyboard.nextLine();
             
             SaveGame.saveHighscore(playerName, finalScore);
+            System.out.println();
             SaveGame.displayHighscores();
+            System.out.println();
+            SaveTime.displayTimes();
         }
         
 
@@ -397,8 +415,13 @@ public class Play {
             } else if ("x".equals(command[0])) {
 
                 return false;
+                
 
-            } else {
+
+            } 
+
+            else 
+            {
 
                 System.out.println("Command not recognised, please try again!");
 
