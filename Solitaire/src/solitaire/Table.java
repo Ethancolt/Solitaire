@@ -6,21 +6,8 @@ package solitaire;
  */
 public class Table extends CardPile {
     
-    public Table()
+    public Table() //Super ConstructorTable does not need Extra Functionality
     {
         super();
-    }
-    
-    @Override
-    public String toString()
-    {
-       String out = "";
-        for (Card card: cards)
-        {
-            out += card.toString();
-            out += ",";
-        }
-        
-        return out;
     }
 }
