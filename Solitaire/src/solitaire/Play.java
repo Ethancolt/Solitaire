@@ -1,5 +1,6 @@
 package solitaire;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -9,7 +10,7 @@ import java.time.Duration;
  *
  * @author Ethan Smith [21153581] and Trey Baker [21155292]
  */
-public class Play {
+public class Play implements Serializable {
 
     Foundation[] foundation = new Foundation[4];
     Stock stock = new Stock();
@@ -42,9 +43,21 @@ public class Play {
         
         Play game = new Play();
 
-        game.generate();
+        DBManager db = new DBManager();
 
         Scanner keyboard = new Scanner(System.in);
+        
+        System.out.println("Would you like to load?");
+        
+        if (keyboard.nextLine().equals("Y")) {
+            
+            game = db.loadGame();
+            
+        } else {
+            
+            game.generate();
+            
+        }
 
         while (game.playGame(keyboard));
         
@@ -117,6 +130,8 @@ public class Play {
             System.out.println();
             SaveTime.displayTimes();
         }
+        
+        db.saveGame(game);
         
 
         keyboard.close();

@@ -1,10 +1,12 @@
 package solitaire;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Ethan Smith [21153581]
  */
-public class CardLocation {
+public class CardLocation implements Serializable {
     
     public CardPile pile;
     public int index;

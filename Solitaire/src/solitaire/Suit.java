@@ -1,10 +1,12 @@
 package solitaire;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Ethan Smith [21153581]
  */
-public enum Suit {
+public enum Suit implements Serializable {
     
     DIAMONDS('♦', 'R'), 
     HEARTS('♥', 'R'), 

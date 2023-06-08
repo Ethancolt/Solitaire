@@ -5,8 +5,9 @@ package solitaire;
  * @author Trey Baker [21155292]
  * 
  */
+import java.io.Serializable;
 import java.util.Stack;
-public abstract class CardPile 
+public abstract class CardPile implements Serializable
 {
 
     protected Stack<Card> cards;

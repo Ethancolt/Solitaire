@@ -1,10 +1,12 @@
 package solitaire;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Ethan Smith [21153581]
  */
-public enum FaceValue {
+public enum FaceValue implements Serializable {
     
     ACE('A'),
     TWO('2'),

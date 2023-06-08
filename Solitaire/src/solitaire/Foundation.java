@@ -1,10 +1,12 @@
 package solitaire;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Trey Baker [21155292]
  */
-public class Foundation extends CardPile 
+public class Foundation extends CardPile implements Serializable
 {
     public Foundation()
     {

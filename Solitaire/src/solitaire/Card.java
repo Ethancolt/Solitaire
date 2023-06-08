@@ -1,10 +1,12 @@
 package solitaire;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Ethan Smith [21153581]
  */
-public class Card {
+public class Card implements Serializable {
     
     Suit suit;
     FaceValue value;
