@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
  *
  * @author Trey Baker [21155292]
  */
-public class Utils {
+public class ImageReader {
     
 
     

@@ -28,7 +28,7 @@ public class MenuOption implements Runnable{
         this.y_size = y_size;
         this.isActive = false;
         
-        image = Utils.readImage("menu_" + imageId + ".png");
+        image = ImageReader.readImage("menu_" + imageId + ".png");
     }
 
     public int getX_coordinate() {

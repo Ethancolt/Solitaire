@@ -32,7 +32,7 @@ public class Card {
     public Card(String path){
         this.path = path;
         
-        image = Utils.readImage(path);
+        image = ImageReader.readImage(path);
     }
     
     public Card(String path, int x_location, int y_location){
@@ -40,7 +40,7 @@ public class Card {
         this.x_location = x_location;
         this.y_location = y_location;
         
-        image = Utils.readImage(path);
+        image = ImageReader.readImage(path);
     }
     
     public Card(String path, int x_location, int y_location, boolean isRedColor, int number, int group){
@@ -51,12 +51,12 @@ public class Card {
         this.number = number;
         this.group = group;
         
-        image = Utils.readImage(path);
+        image = ImageReader.readImage(path);
     }    
     
     public void setPath(String path){
         this.path = path;
-        image = Utils.readImage(path);
+        image = ImageReader.readImage(path);
     }
     
     public void setImageXLocation(int x_location){
