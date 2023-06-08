@@ -71,7 +71,7 @@ public class Menu implements Runnable{
         }
 
         }
-    }
+    
     
     public int clickOption(int x, int y, GamePanel my){
         MenuOption option;
