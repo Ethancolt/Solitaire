@@ -98,21 +98,60 @@ public final class DBManager {
 
             }
 
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO saveGame "
-                    + "(table1, table2, table3, table4, table5, table6, table7, "
-                    + "foundation1, foundation2, foundation3, foundation4, provider1, provider2, user_id) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM saveGame WHERE user_id = (?)");
+            statement.setInt(1, userID);
 
-            for (int i = 0; i < 13; i++) {
+            ResultSet resultSet = statement.executeQuery();
 
-                statement.setBytes(i + 1, data[i]);
+            if (resultSet.next()) {
 
+                statement = conn.prepareStatement("UPDATE saveGame SET "
+                        + "table1 = ?, "
+                        + "table2 = ?, "
+                        + "table3 = ?, "
+                        + "table4 = ?, "
+                        + "table5 = ?, "
+                        + "table6 = ?, "
+                        + "table7 = ?, "
+                        + "foundation1 = ?, "
+                        + "foundation2 = ?, "
+                        + "foundation3 = ?, "
+                        + "foundation4 = ?, "
+                        + "provider1 = ?, "
+                        + "provider2 = ? "
+                        + "WHERE user_id = ?");
+
+                for (int i = 0; i < 13; i++) {
+
+                    statement.setBytes(i + 1, data[i]);
+
+                }
+
+                statement.setInt(14, userID);
+
+                statement.executeUpdate();
+                statement.close();
+
+            } else {
+                
+                statement = conn.prepareStatement("INSERT INTO saveGame "
+                        + "(table1, table2, table3, table4, table5, table6, table7, "
+                        + "foundation1, foundation2, foundation3, foundation4, provider1, provider2, user_id) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                for (int i = 0; i < 13; i++) {
+
+                    statement.setBytes(i + 1, data[i]);
+
+                }
+
+                statement.setInt(14, userID);
+
+                statement.executeUpdate();
+                statement.close();
+                
             }
 
-            statement.setInt(14, userID);
-
-            statement.executeUpdate();
-            statement.close();
 
         } catch (SQLException | IOException ex) {
 
@@ -122,14 +161,16 @@ public final class DBManager {
 
     }
 
-    public void loadGame(GameBoard board) {
+    public void loadGame(GameBoard board, int userID) {
 
         CardPile[] piles = new CardPile[13];
 
         try {
 
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM saveGame");
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM saveGame WHERE user_id = (?)");
+            statement.setInt(1, userID);
+
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
 
@@ -237,14 +278,14 @@ public final class DBManager {
             if (resultSet.next()) {
 
                 int oldScore = resultSet.getInt("score");
-                
+
                 if (oldScore < score) {
-                    
+
                     statement = conn.prepareStatement("UPDATE score SET score = ? WHERE user_id = ?");
                     statement.setInt(1, score);
                     statement.setInt(2, userID);
                     statement.executeUpdate();
-                    
+
                 }
 
             } else {
@@ -266,52 +307,50 @@ public final class DBManager {
         }
 
     }
-    
+
     public ArrayList<Highscore> getHighscores() {
-        
+
         ArrayList<Highscore> highscores = new ArrayList<>();
-        
+
         try {
-            
-            PreparedStatement statement = conn.prepareStatement("SELECT * FROM score ORDER BY score DESC");
-            
+
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM score ORDER BY score DESC LIMIT 10");
+
             ResultSet resultSet = statement.executeQuery();
-            
-            int count = 0;
-            
-            while (resultSet.next() && count++ < 10) {
-                
+
+            while (resultSet.next()) {
+
                 int userID = resultSet.getInt("user_id");
                 int score = resultSet.getInt("score");
                 String name = "";
-                
+
                 statement = conn.prepareStatement("SELECT name FROM user WHERE user_id = (?)");
                 statement.setInt(1, userID);
-                
+
                 ResultSet userResultSet = statement.executeQuery();
-                
+
                 if (userResultSet.next()) {
-                    
+
                     name = userResultSet.getString("name");
-                    
+
                 } else {
-                    
+
                     name = "Unknown";
-                    
+
                 }
-                
+
                 highscores.add(new Highscore(name, score));
-                
+
             }
-            
+
         } catch (SQLException ex) {
-            
+
             System.out.println(ex.getMessage());
-            
+
         }
-        
+
         return highscores;
-        
+
     }
 
     private boolean saveGameExists() {
