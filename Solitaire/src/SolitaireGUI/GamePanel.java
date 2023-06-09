@@ -16,20 +16,28 @@ import java.awt.event.MouseListener;
  */
 public class GamePanel extends JPanel implements  MouseMotionListener, MouseListener{
 
-    private GameBoard board = new GameBoard();
+    private GameBoard board;
     private final Deck deck = new Deck();
     private final Menu menu = new Menu();
     
-    public GamePanel(){
+    public GamePanel(GameBoard board){
 
+        if (board != null) {
+            
+            this.board = board;
+            
+        } else {
+            
+            this.board = new GameBoard();
+            
+        }
+        
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
         
-        board.addCards(deck.getCards());
+        this.board.addCards(deck.getCards());
         
-        DBManager db = new DBManager();
         
-
         
     }
     

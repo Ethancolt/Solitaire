@@ -28,7 +28,7 @@ public class Play {
             @Override
             protected void done() {
                 // Create and show the game panel
-                GamePanel game = new GamePanel();
+                GamePanel game = new GamePanel(openMenu.board);
                 game.setSize(ConstantValues.gameWidth, ConstantValues.gameHeight);
                 game.setBackground(Color.yellow);
 

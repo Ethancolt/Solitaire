@@ -29,6 +29,24 @@ public final class DBManager {
 
         connect();
 
+        if (!userExists()) {
+
+            createUser();
+
+        }
+        
+        if (!saveGameExists()) {
+
+            createSaveGame();
+
+        }
+
+        if (!scoreExists()) {
+
+            createScore();
+
+        }
+
     }
 
     public void connect() {
@@ -70,12 +88,6 @@ public final class DBManager {
     public void saveGame(GameBoard board, int userID) {
 
         try {
-
-            if (!saveGameExists()) {
-
-                createSaveGame();
-
-            }
 
             CardPile[] piles = board.getCardPiles();
             byte[][] data = new byte[13][];
@@ -133,7 +145,7 @@ public final class DBManager {
                 statement.close();
 
             } else {
-                
+
                 statement = conn.prepareStatement("INSERT INTO saveGame "
                         + "(table1, table2, table3, table4, table5, table6, table7, "
                         + "foundation1, foundation2, foundation3, foundation4, provider1, provider2, user_id) "
@@ -149,9 +161,8 @@ public final class DBManager {
 
                 statement.executeUpdate();
                 statement.close();
-                
-            }
 
+            }
 
         } catch (SQLException | IOException ex) {
 
@@ -209,19 +220,38 @@ public final class DBManager {
 
     }
 
-    public int getUserID(String username) {
+    public boolean canBeContinued(int userID) {
 
-        if (!userExists()) {
+        try {
 
-            createUser();
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM saveGame WHERE user_id = (?)");
+            statement.setInt(1, userID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                return true;
+
+            }
+
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
 
         }
+
+        return false;
+
+    }
+
+    public int getUserID(String username) {
 
         int userID = -1;
 
         try {
 
-            PreparedStatement statement = conn.prepareStatement("SELECT id FROM user WHERE name = ?");
+            PreparedStatement statement = conn.prepareStatement("SELECT id FROM users WHERE name = ?");
             statement.setString(1, username);
 
             ResultSet resultSet = statement.executeQuery();
@@ -232,7 +262,7 @@ public final class DBManager {
 
             } else {
 
-                statement = conn.prepareStatement("INSERT INTO user (name) VALUES (?)",
+                statement = conn.prepareStatement("INSERT INTO users (name) VALUES (?)",
                         Statement.RETURN_GENERATED_KEYS);
                 statement.setString(1, username);
                 statement.executeUpdate();
@@ -260,13 +290,35 @@ public final class DBManager {
 
     }
 
-    public void saveScore(int score, int userID) {
+    public ArrayList<String> getUsers() {
 
-        if (!scoreExists()) {
+        ArrayList<String> users = new ArrayList<>();
 
-            createScore();
+        try {
+
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM users");
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+
+                String name = resultSet.getString("name");
+
+                users.add(name);
+
+            }
+
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
 
         }
+
+        return users;
+
+    }
+
+    public void saveScore(int score, int userID) {
 
         try {
 
@@ -324,7 +376,7 @@ public final class DBManager {
                 int score = resultSet.getInt("score");
                 String name = "";
 
-                statement = conn.prepareStatement("SELECT name FROM user WHERE user_id = (?)");
+                statement = conn.prepareStatement("SELECT name FROM users WHERE user_id = (?)");
                 statement.setInt(1, userID);
 
                 ResultSet userResultSet = statement.executeQuery();
@@ -396,8 +448,8 @@ public final class DBManager {
                     + "foundation3 BLOB,"
                     + "foundation4 BLOB,"
                     + "provider1 BLOB,"
-                    + "provider2 BLOB"
-                    + "FOREIGN KEY (user_id) REFERENCES user(id)"
+                    + "provider2 BLOB,"
+                    + "FOREIGN KEY (user_id) REFERENCES users(id)"
                     + ")";
 
             statement.executeUpdate(sql);
@@ -416,7 +468,7 @@ public final class DBManager {
         try {
 
             DatabaseMetaData metaData = conn.getMetaData();
-            ResultSet tables = metaData.getTables(null, null, "USER", null);
+            ResultSet tables = metaData.getTables(null, null, "USERS", null);
 
             boolean exists = tables.next();
 
@@ -440,7 +492,7 @@ public final class DBManager {
 
             Statement statement = conn.createStatement();
 
-            String sql = "CREATE TABLE user ("
+            String sql = "CREATE TABLE users ("
                     + "id INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY,"
                     + "name VARCHAR(25)"
                     + ")";
@@ -488,7 +540,7 @@ public final class DBManager {
             String sql = "CREATE TABLE score ("
                     + "user_id INT PRIMARY KEY,"
                     + "score INT,"
-                    + "FOREIGN KEY (user_id) REFERENCES user(id)"
+                    + "FOREIGN KEY (user_id) REFERENCES users(id)"
                     + ")";
 
             statement.executeUpdate(sql);

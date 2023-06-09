@@ -22,5 +22,7 @@ public class ConstantValues {
     public static int SPACE_BETWEEN_GROUPS = 250;
     public static int MENU_MIN_LENGT = 50;
     public static int MENU_MAX_LENGT = 300;
+    
+    public static DBManager db = new DBManager();
 
 }
