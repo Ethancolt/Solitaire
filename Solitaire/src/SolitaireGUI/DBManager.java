@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -235,7 +236,7 @@ public final class DBManager {
 
             if (resultSet.next()) {
 
-                int oldScore = resultSet.getInt("id");
+                int oldScore = resultSet.getInt("score");
                 
                 if (oldScore < score) {
                     
@@ -264,6 +265,53 @@ public final class DBManager {
 
         }
 
+    }
+    
+    public ArrayList<Highscore> getHighscores() {
+        
+        ArrayList<Highscore> highscores = new ArrayList<>();
+        
+        try {
+            
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM score ORDER BY score DESC");
+            
+            ResultSet resultSet = statement.executeQuery();
+            
+            int count = 0;
+            
+            while (resultSet.next() && count++ < 10) {
+                
+                int userID = resultSet.getInt("user_id");
+                int score = resultSet.getInt("score");
+                String name = "";
+                
+                statement = conn.prepareStatement("SELECT name FROM user WHERE user_id = (?)");
+                statement.setInt(1, userID);
+                
+                ResultSet userResultSet = statement.executeQuery();
+                
+                if (userResultSet.next()) {
+                    
+                    name = userResultSet.getString("name");
+                    
+                } else {
+                    
+                    name = "Unknown";
+                    
+                }
+                
+                highscores.add(new Highscore(name, score));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            System.out.println(ex.getMessage());
+            
+        }
+        
+        return highscores;
+        
     }
 
     private boolean saveGameExists() {
