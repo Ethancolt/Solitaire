@@ -10,7 +10,7 @@ public class GameOpen extends JFrame {
     public boolean isGameReady = false;
     
     public GameOpen() {
-        super("User Name");
+        super("Solitaire");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 150);
         setLayout(new BorderLayout());
@@ -47,7 +47,7 @@ public class GameOpen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFrame rulesFrame = new JFrame("Game Rules");
                 rulesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                rulesFrame.setSize(2050, 610);
+                rulesFrame.setSize(2050, 630);
                 JTextArea rulesTextArea = new JTextArea("Solitaire Game Rules:\n\n"
                         + "Setup:\nThe game begins with seven tableau piles of cards, with the first pile containing one card, the second pile containing two cards, "
                         + "and so on, up to the seventh pile containing seven cards. The top card of each tableau pile is face-up, while the rest are face-down. The remaining cards form the stock pile.\n\n\n"
@@ -55,7 +55,7 @@ public class GameOpen extends JFrame {
                         + "cards of the same suit in increasing rank (2, 3, 4, etc.) until a King is placed on top.\n\n\n"
                         + "Tableau Piles:\nCards in the tableau (7 piles at the bottom) piles can be built down in alternating colors (e.g., a black 7 can be placed on a red 8). For example, a red 6 can "
                         + "be placed on a black 7, and so on. Only the top card of each tableau pile is available for play."
-                        + "n\n\n"
+                        + "\n\n\n"
                         + "Moving Cards:\nMove cards by dragging them and dropping them to the desired loctation with your mouse. You can move cards from the tableau piles to the foundation piles if they "
                         + "follow the ascending order and suit matching rules. Additionally, you can build sequences of descending cards on the tableau piles. For example, you can move a black Queen from the tableau onto a red King.\n\n\n"
                         + "Stock and Waste Piles:\nYou can draw cards from the stock pile (Top left pile with cards) one at a time and place them face-up in the waste pile. Once the stock pile is empty, "
