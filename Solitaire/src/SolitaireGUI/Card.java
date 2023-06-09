@@ -3,13 +3,20 @@ package SolitaireGUI;
 
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import javax.imageio.ImageIO;
 
 
 /**
  *
  * @author Trey Baker [21155292]
  */
-public class Card {
+public class Card implements Serializable {
     
     private int x_location;
     private int y_location;
@@ -21,7 +28,7 @@ public class Card {
     private boolean isRedColor;
     private int group;
     private String path;
-    private BufferedImage image;
+    private transient BufferedImage image;
     
     private boolean isSelected = false;
     private boolean isVisile = false;
@@ -130,4 +137,28 @@ public class Card {
     public int getGroup(){
         return this.group;
     }
+    
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+
+        // Convert the BufferedImage to a byte array
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "PNG", byteStream);
+        byte[] imageBytes = byteStream.toByteArray();
+
+        // Write the byte array to the ObjectOutputStream
+        out.writeObject(imageBytes);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        // Read the byte array from the ObjectInputStream
+        byte[] imageBytes = (byte[]) in.readObject();
+
+        // Reconstruct the BufferedImage from the byte array
+        ByteArrayInputStream byteStream = new ByteArrayInputStream(imageBytes);
+        image = ImageIO.read(byteStream);
+    }
+    
 }

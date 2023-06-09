@@ -17,21 +17,21 @@ public class GameBoard{
     private final CardPile CardsDragged;
     private CardPile groupOwnerOfDraggedCards;
 
-    private final CardPile provider1;
-    private final CardPile provider2;
+    private CardPile provider1;
+    private CardPile provider2;
     
-    private final CardPile foundation1;
-    private final CardPile foundation2;
-    private final CardPile foundation3;
-    private final CardPile foundation4;
+    private CardPile foundation1;
+    private CardPile foundation2;
+    private CardPile foundation3;
+    private CardPile foundation4;
     
-    private final CardPile table1;
-    private final CardPile table2;
-    private final CardPile table3;
-    private final CardPile table4;
-    private final CardPile table5;
-    private final CardPile table6;
-    private final CardPile table7;
+    private CardPile table1;
+    private CardPile table2;
+    private CardPile table3;
+    private CardPile table4;
+    private CardPile table5;
+    private CardPile table6;
+    private CardPile table7;
     
   
     
@@ -500,4 +500,49 @@ public class GameBoard{
                 break;
         }
     }
+    
+    public CardPile[] getCardPiles() {
+        
+        CardPile[] piles = new CardPile[13];
+        
+        piles[0] = table1;
+        piles[1] = table2;
+        piles[2] = table3;
+        piles[3] = table4;
+        piles[4] = table5;
+        piles[5] = table6;
+        piles[6] = table7;
+        
+        piles[7] = foundation1;
+        piles[8] = foundation2;
+        piles[9] = foundation3;
+        piles[10] = foundation4;
+        
+        piles[11] = provider1;
+        piles[12] = provider2;
+        
+        return piles;
+        
+    }
+    
+    public void setCardPiles(CardPile[] piles) {
+        
+        table1 = piles[0];
+        table2 = piles[1];
+        table3 = piles[2];
+        table4 = piles[3];
+        table5 = piles[4];
+        table6 = piles[5];
+        table7 = piles[6];
+        
+        foundation1 = piles[7];
+        foundation2 = piles[8];
+        foundation3 = piles[9];
+        foundation4 = piles[10];
+        
+        provider1 = piles[11];
+        provider2 = piles[12];
+        
+    }
+
 }

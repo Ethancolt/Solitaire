@@ -2,13 +2,14 @@
 package SolitaireGUI;
 
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
  *
  * @author Trey Baker [21155292]
  */
-public class CardPile {
+public class CardPile implements Serializable {
     private LinkedList<Card> cards = new LinkedList<>();
 
     private int x_position;

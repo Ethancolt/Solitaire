@@ -26,6 +26,12 @@ public class GamePanel extends JPanel implements  MouseMotionListener, MouseList
         this.addMouseListener(this);
         
         board.addCards(deck.getCards());
+        
+        DBManager db = new DBManager();
+        
+        db.saveGame(board);
+        db.loadGame(board);
+        
     }
     
     @Override
