@@ -29,8 +29,7 @@ public class GamePanel extends JPanel implements  MouseMotionListener, MouseList
         
         DBManager db = new DBManager();
         
-        db.saveGame(board);
-        db.loadGame(board);
+
         
     }
     
