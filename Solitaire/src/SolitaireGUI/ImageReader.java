@@ -14,7 +14,8 @@ public class ImageReader {
     
 
     
-    public static BufferedImage readImage(String path){
+    public static BufferedImage readImage(String path)
+    {
         try {
            return ImageIO.read(new File("src/images/"+path));
         } catch (IOException e) {

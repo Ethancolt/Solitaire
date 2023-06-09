@@ -15,34 +15,37 @@ public class Deck {
     public static final BufferedImage HIDDEN_SIDE = ImageReader.readImage("back-1.png");
     public static final BufferedImage NEW_GAME = ImageReader.readImage("new_game.png");
 
-    public Deck(){
+    public Deck()
+    {
         newGame();
     }
     
-    public LinkedList<Card> getCards(){
+    public LinkedList<Card> getCards()
+    {
         return mainStack;
     }
     
-    public void barajear(){
+    public void barajear()
+    {
         
     }
     
-    public void resetGame(){
+    public void resetGame()
+    {
         
     }
     
-    public void newGame(){
+    public void newGame()
+    {
         mainStack.clear();
-        for (int i = 1; i < 5; i++) {
-            for (int j = 1; j < 14; j++) {
+        for (int i = 1; i < 5; i++) 
+        {
+            for (int j = 1; j < 14; j++) 
+            {
                 mainStack.add(new Card(i+"-"+j+".png", 0, 0, (i%2 != 0), j, i));
             }
         }
         Collections.shuffle(mainStack);
-    }
-    
-    public void animation(){
-        
     }
     
 }
