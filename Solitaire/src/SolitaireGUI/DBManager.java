@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
 /**
  *
  * @author Ethan Smith [21153581]
@@ -67,11 +66,11 @@ public final class DBManager {
 
     }
 
-    public void saveGame(GameBoard board) {
+    public void saveGame(GameBoard board, int userID) {
 
         try {
 
-            if (!SaveGameExists()) {
+            if (!saveGameExists()) {
 
                 createSaveGame();
 
@@ -100,14 +99,16 @@ public final class DBManager {
 
             PreparedStatement statement = conn.prepareStatement("INSERT INTO saveGame "
                     + "(table1, table2, table3, table4, table5, table6, table7, "
-                    + "foundation1, foundation2, foundation3, foundation4, provider1, provider2) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    + "foundation1, foundation2, foundation3, foundation4, provider1, provider2, user_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             for (int i = 0; i < 13; i++) {
 
                 statement.setBytes(i + 1, data[i]);
 
             }
+
+            statement.setInt(14, userID);
 
             statement.executeUpdate();
             statement.close();
@@ -166,7 +167,106 @@ public final class DBManager {
 
     }
 
-    private boolean SaveGameExists() {
+    public int getUserID(String username) {
+
+        if (!userExists()) {
+
+            createUser();
+
+        }
+
+        int userID = -1;
+
+        try {
+
+            PreparedStatement statement = conn.prepareStatement("SELECT id FROM user WHERE name = ?");
+            statement.setString(1, username);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                userID = resultSet.getInt("id");
+
+            } else {
+
+                statement = conn.prepareStatement("INSERT INTO user (name) VALUES (?)",
+                        Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, username);
+                statement.executeUpdate();
+
+                resultSet = statement.getGeneratedKeys();
+
+                if (resultSet.next()) {
+
+                    userID = resultSet.getInt(1);
+
+                }
+
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
+
+        }
+
+        return userID;
+
+    }
+
+    public void saveScore(int score, int userID) {
+
+        if (!scoreExists()) {
+
+            createScore();
+
+        }
+
+        try {
+
+            PreparedStatement statement = conn.prepareStatement("SELECT score FROM score WHERE user_id = ?");
+            statement.setInt(1, userID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                int oldScore = resultSet.getInt("id");
+                
+                if (oldScore < score) {
+                    
+                    statement = conn.prepareStatement("UPDATE score SET score = ? WHERE user_id = ?");
+                    statement.setInt(1, score);
+                    statement.setInt(2, userID);
+                    statement.executeUpdate();
+                    
+                }
+
+            } else {
+
+                statement = conn.prepareStatement("INSERT INTO score (user_id, score) VALUES (?, ?)");
+                statement.setInt(1, userID);
+                statement.setInt(2, score);
+                statement.executeUpdate();
+
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
+
+        }
+
+    }
+
+    private boolean saveGameExists() {
 
         try {
 
@@ -196,7 +296,7 @@ public final class DBManager {
             Statement statement = conn.createStatement();
 
             String sql = "CREATE TABLE saveGame ("
-                    + "id INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY,"
+                    + "user_id INT PRIMARY KEY,"
                     + "table1 BLOB,"
                     + "table2 BLOB,"
                     + "table3 BLOB,"
@@ -209,13 +309,103 @@ public final class DBManager {
                     + "foundation3 BLOB,"
                     + "foundation4 BLOB,"
                     + "provider1 BLOB,"
-                    + "provider2 BLOB)";
+                    + "provider2 BLOB"
+                    + "FOREIGN KEY (user_id) REFERENCES user(id)"
+                    + ")";
 
             statement.executeUpdate(sql);
-
             statement.close();
 
-            System.out.println("saveGame table created successfully");
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
+
+        }
+
+    }
+
+    private boolean userExists() {
+
+        try {
+
+            DatabaseMetaData metaData = conn.getMetaData();
+            ResultSet tables = metaData.getTables(null, null, "USER", null);
+
+            boolean exists = tables.next();
+
+            tables.close();
+
+            return exists;
+
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
+
+        }
+
+        return false;
+
+    }
+
+    private void createUser() {
+
+        try {
+
+            Statement statement = conn.createStatement();
+
+            String sql = "CREATE TABLE user ("
+                    + "id INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY,"
+                    + "name VARCHAR(25)"
+                    + ")";
+
+            statement.executeUpdate(sql);
+            statement.close();
+
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
+
+        }
+
+    }
+
+    private boolean scoreExists() {
+
+        try {
+
+            DatabaseMetaData metaData = conn.getMetaData();
+            ResultSet tables = metaData.getTables(null, null, "SCORE", null);
+
+            boolean exists = tables.next();
+
+            tables.close();
+
+            return exists;
+
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
+
+        }
+
+        return false;
+
+    }
+
+    private void createScore() {
+
+        try {
+
+            Statement statement = conn.createStatement();
+
+            String sql = "CREATE TABLE score ("
+                    + "user_id INT PRIMARY KEY,"
+                    + "score INT,"
+                    + "FOREIGN KEY (user_id) REFERENCES user(id)"
+                    + ")";
+
+            statement.executeUpdate(sql);
+            statement.close();
 
         } catch (SQLException ex) {
 
