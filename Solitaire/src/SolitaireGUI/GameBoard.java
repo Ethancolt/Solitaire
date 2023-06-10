@@ -33,6 +33,8 @@ public class GameBoard{
     private CardPile table6;
     private CardPile table7;
     
+    private boolean isGameWon;
+    
   
     
     public GameBoard()

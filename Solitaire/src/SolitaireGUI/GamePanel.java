@@ -1,65 +1,69 @@
-
 package SolitaireGUI;
 
-
-
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 import java.awt.event.MouseListener;
 
-
 /**
- *
+ * 
  * @author Trey Baker [21155292]
  */
-public class GamePanel extends JPanel implements  MouseMotionListener, MouseListener{
+public class GamePanel extends JPanel implements MouseMotionListener, MouseListener, KeyListener {
 
     private GameBoard board;
     private final Deck deck = new Deck();
-    private final Menu menu = new Menu();
-    
-    public GamePanel(GameBoard board){
+    private PauseMenu pauseMenu;
+    private ScoreTracker scoreTracker = new ScoreTracker();
 
+    public GamePanel(GameBoard board) {
         if (board != null) {
-            
             this.board = board;
-            
         } else {
-            
             this.board = new GameBoard();
-            
         }
-        
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
-        
+        this.addKeyListener(this);
+        this.setFocusable(true);
         this.board.addCards(deck.getCards());
-        
-        
-        
+    }
+
+    public Deck getDeck()
+    {
+        return deck;
     }
     
+        public GameBoard getGameBoard()
+    {
+        return board;
+    }
+    
+        public void resetGame()
+        {
+                deck.newGame();
+                board = new GameBoard();
+                board.addCards(deck.getCards());
+                repaint();
+                scoreTracker.resetScore();
+                pauseMenu.dispose();
+        }
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        
+
         g.setColor(ConstantValues.backGroundColor);
         g.fillRect(0, 0, ConstantValues.gameWidth, ConstantValues.gameHeight);
-        
+
         board.drawBoard(g, this);
-       
-        menu.drawMenu(g);
     }
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        if (!menu.isIsActive()) {
-            this.board.draggImages(me.getX(), me.getY());
-        }else{
-            menu.showHideMenu(this);
-        }
+        this.board.draggImages(me.getX(), me.getY());
         this.repaint();
     }
 
@@ -69,34 +73,8 @@ public class GamePanel extends JPanel implements  MouseMotionListener, MouseList
 
     @Override
     public void mouseClicked(MouseEvent me) {
-        // If we click menu
-        if(me.getX() <= menu.getSize()){
-            if(menu.isIsActive()){
-                this.validateMenuAnswer(this.menu.clickOption(me.getX(), me.getY(), this));
-            }else{
-                menu.showHideMenu(this);
-            }
-        }
-        if(!menu.isIsActive()){
-            board.clickProvider(me.getX(), me.getY());
-        }else{
-            menu.showHideMenu(this);
-        }
-        
+        this.board.clickProvider(me.getX(), me.getY());
         repaint();
-    }
-    
-    private void validateMenuAnswer(int response){
-        switch(response){
-            case 0:
-                deck.newGame();
-                board = new GameBoard();
-                board.addCards(deck.getCards());
-                repaint();
-                break;
-            default:
-                break;
-        } 
     }
 
     @Override
@@ -105,9 +83,7 @@ public class GamePanel extends JPanel implements  MouseMotionListener, MouseList
 
     @Override
     public void mouseReleased(MouseEvent me) {
-        if (!menu.isIsActive()) {
-            this.board.releaseCards(me.getX(), me.getY());
-        }
+        this.board.releaseCards(me.getX(), me.getY());
         this.repaint();
     }
 
@@ -117,5 +93,20 @@ public class GamePanel extends JPanel implements  MouseMotionListener, MouseList
 
     @Override
     public void mouseExited(MouseEvent me) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyChar() == 'p' || e.getKeyChar() == 'P') {
+            pauseMenu = new PauseMenu(this);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 }

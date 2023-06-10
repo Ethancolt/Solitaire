@@ -6,51 +6,45 @@ package SolitaireGUI;
 
 /**
  *
- * @author Itstr
+ * @author Trey Baker
  */
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 
-public class GameWin extends JPanel {
-    private JFrame newWindow;
+import java.util.ArrayList;
 
-    public GameWin() {
-        setLayout(new BorderLayout());
-        askForName();
-    }
-
-    private void askForName() {
-        String name = JOptionPane.showInputDialog("You have won! Please enter your name:");
-        if (name != null && !name.isEmpty()) {
-            showNewWindow(name);
-        } else {
-            JOptionPane.showMessageDialog(GameWin.this, "Please enter a valid name.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            askForName(); // Ask for name again if it was not entered
-        }
-    }
-
-    private void showNewWindow(String name) {
-        newWindow = new JFrame("Congratulations!");
-        newWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newWindow.setSize(400, 300);
-
-        newWindow.setVisible(true);
-    }
+public class GameWin {
+    private static ArrayList<String> highScores = new ArrayList<>();
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JFrame frame = new JFrame("Game Win");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(300, 200);
+        JFrame frame = new JFrame("Congratulations");
+        frame.setSize(400, 100);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                GameWin gameWin = new GameWin();
-                frame.getContentPane().add(gameWin, BorderLayout.CENTER);
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Congratulations, you have won! Please enter your name:");
+        JTextField textField = new JTextField(15);
+        JButton submitButton = new JButton("Submit");
 
-                frame.setVisible(true);
+        submitButton.addActionListener(e -> {
+            String name = textField.getText();
+            if (name.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter your name.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                highScores.add(name);
+                StringBuilder message = new StringBuilder("Congratulations, " + name + "!\n\nHigh Scores:\n");
+                for (int i = 0; i < highScores.size(); i++) {
+                    message.append(i + 1).append(". ").append(highScores.get(i)).append("\n");
+                }
+                JOptionPane.showMessageDialog(frame, message.toString());
             }
         });
+
+        panel.add(label);
+        panel.add(textField);
+        panel.add(submitButton);
+        frame.add(panel);
+
+        frame.setVisible(true);
     }
 }
+
